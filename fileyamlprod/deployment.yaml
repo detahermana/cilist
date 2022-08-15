@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app
+  labels:
+    app: frontend-app
+spec:
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      containers:
+      - name: frontend-app
+        image: detahermana/frontend-cilist-prod:latest
+        env :
+        - name : "REACT_APP_BACKEND_BASE_URL"
+          value : "http://prod.backend.detahermana.xyz"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: 100m
+          limits:
+            cpu: 1024m
+            memory: 2048M
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-app
+  labels:
+    app: backend-app
+spec:
+  selector:
+    matchLabels:
+      app: backend-app
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+      - name: backend-app
+        image: detahermana/backend-cilist:latest
+        env:
+        - name: "REACT_APP_DATABASE_HOST"
+          value: "prod-cilist-db.cz69nfjwqbzz.us-east-2.rds.amazonaws.com"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: 100m
+          limits:
+            cpu: 1024m
+            memory: 2048M

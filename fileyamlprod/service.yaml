@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-net
+spec:
+  selector:
+    app: frontend-app
+  type: ClusterIP
+  ports:
+  - port: 3000  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-net
+spec:
+  selector:
+    app: backend-app
+  type: ClusterIP
+  ports:
+    - port: 5000
