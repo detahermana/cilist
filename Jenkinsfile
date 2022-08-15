@@ -2,56 +2,60 @@ properties([pipelineTriggers([githubPush()])])
 pipeline {
     agent any
     stages {
+        stage('Code Scanning') {
+          agent { label "agent1" }
+            steps {
+              //
+                script {
+                echo "Begin Test" 
+                def scannerHome = tool 'sonaqube1' ;
+	              withSonarQubeEnv('sonaqube') {
+	              sh "${scannerHome}/bin/sonar-scanner"
+	                }
+                }
+              }
+            }
         stage('Build') {
           agent { label "agent1" }
             steps {
               //
-                script { echo "Build"
-                if (env.BRANCH_NAME == "stage")
-                
+                script {
+                echo "Build"
+                if (env.BRANCH_NAME == "staging")
                 { 
-                sh "docker build -t detahermana/landingpage:stage-$BUILD_NUMBER . "
-                sh "docker push detahermana/landingpage:stage-$BUILD_NUMBER"
-
+                // sh "pwd && ls -lah"
+                sh "docker build -t detahermana/backend-cilist:stage-$BUILD_NUMBER backend/."
+                sh "docker build -t detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER frontend/."
+                sh "docker push detahermana/backend-cilist:stage-$BUILD_NUMBER"
+                sh "docker push detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER"
                 }else{ 
-                sh "docker build -t detahermana/landingpage:prod-$BUILD_NUMBER . "
-                sh "docker push detahermana/landingpage:prod-$BUILD_NUMBER"
-                
+                sh "pwd && ls -lah"
+                sh "docker build -t detahermana/backend-cilist:prod-$BUILD_NUMBER backend/."
+                sh "docker build -t detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER frontend/."
+                sh "docker push detahermana/backend-cilist:prod-$BUILD_NUMBER"
+                sh "docker push detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER"
                 }
-                
-                
-                }
-                
-              }
-            }
-        stage('Test') {
-          agent { label "agent1" }
-            steps {
-              //
-                script { echo "Test" 
-                def scannerHome = tool 'sonarscanner1' ;
-	              withSonarQubeEnv('sonarserver1') {
-	              sh "${scannerHome}/bin/sonar-scanner"
-	                }
-                }
+                }  
               }
             }
         stage('Deploy') {
           agent { label "agent1" }
             steps {
               //
-                script { echo "Testing Deploy Lagi" 
-                
-                if (env.BRANCH_NAME == "stage")
-                
+                script { echo "Deploy" 
+                if (env.BRANCH_NAME == "staging")
                 { 
-                sh "kubectl -n test-lp set image deployment/landingpage-deployment landingpage=detahermana/landingpage:stage-$BUILD_NUMBER"
-                sh "docker image rmi detahermana/landingpage:stage-$BUILD_NUMBER"
+                sh "kubectl set image deployment/web-back cilist-backend=detahermana/backend-cilist:stage-$BUILD_NUMBER -n staging"
+                sh "kubectl set image deployment/web-front cilist-frontend=detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER -n staging"
+                sh "docker image rmi detahermana/backend-cilist:stage-$BUILD_NUMBER"
+                sh "docker image rmi detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER"
                 }else{ 
-                sh "kubectl -n test-lp set image deployment/landingpage-deployment landingpage=detahermana/landingpage:prod-$BUILD_NUMBER"
-                sh "docker image rmi detahermana/landingpage:prod-$BUILD_NUMBER"
-                }
 
+                sh "kubectl set image deployment/web-back cilist-backend=detahermana/backend-cilist:prod-$BUILD_NUMBER -n production"
+                sh "kubectl set image deployment/web-front cilist-frontend=detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER -n production"
+                sh "docker image rmi detahermana/backend-cilist:prod-$BUILD_NUMBER"
+                sh "docker image rmi detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER"
+                }
                 }
             }
           }
