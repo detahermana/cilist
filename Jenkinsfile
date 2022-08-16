@@ -38,26 +38,25 @@ pipeline {
                 }  
               }
             }
-        stage('Deploy') {
-          agent { label "agent1" }
-            steps {
+        //stage('Deploy') {
+          //agent { label "agent1" }
+            //steps {
               //
-                script { echo "Deploy" 
-                if (env.BRANCH_NAME == "staging")
-                { 
-                sh "kubectl set image deployment/web-back cilist-backend=detahermana/backend-cilist:stage-$BUILD_NUMBER -n staging"
-                sh "kubectl set image deployment/web-front cilist-frontend=detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER -n staging"
-                sh "docker image rmi detahermana/backend-cilist:stage-$BUILD_NUMBER"
-                sh "docker image rmi detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER"
-                }else{ 
-
-                sh "kubectl set image deployment/web-back cilist-backend=detahermana/backend-cilist:prod-$BUILD_NUMBER -n production"
-                sh "kubectl set image deployment/web-front cilist-frontend=detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER -n production"
-                sh "docker image rmi detahermana/backend-cilist:prod-$BUILD_NUMBER"
-                sh "docker image rmi detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER"
-                }
-                }
-            }
-          }
-        }
+              //  script { echo "Deploy" 
+                //if (env.BRANCH_NAME == "staging")
+                //{ 
+                //sh "kubectl set image deployment/web-back cilist-backend=detahermana/backend-cilist:stage-$BUILD_NUMBER -n staging"
+                //sh "kubectl set image deployment/web-front cilist-frontend=detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER -n staging"
+                //sh "docker image rmi detahermana/backend-cilist:stage-$BUILD_NUMBER"
+                //sh "docker image rmi detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER"
+                //}else{ 
+                //sh "kubectl set image deployment/web-back cilist-backend=detahermana/backend-cilist:prod-$BUILD_NUMBER -n production"
+                //sh "kubectl set image deployment/web-front cilist-frontend=detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER -n production"
+                //sh "docker image rmi detahermana/backend-cilist:prod-$BUILD_NUMBER"
+                //sh "docker image rmi detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER"
+                //}
+                //}
+            //}
+          //}
+        //}
       }
