@@ -38,11 +38,11 @@ pipeline {
                 }  
               }
             }
-        //stage('Deploy') {
-          //agent { label "agent1" }
-            //steps {
+        stage('Deploy') {
+          agent { label "agent1" }
+            steps {
               //
-              //  script { echo "Deploy" 
+                script { echo "Deploy" 
                 //if (env.BRANCH_NAME == "staging")
                 //{ 
                 //sh "kubectl set image deployment/web-back cilist-backend=detahermana/backend-cilist:stage-$BUILD_NUMBER -n staging"
@@ -55,8 +55,8 @@ pipeline {
                 //sh "docker image rmi detahermana/backend-cilist:prod-$BUILD_NUMBER"
                 //sh "docker image rmi detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER"
                 //}
-                //}
-            //}
-          //}
-        //}
+                }
+            }
+          }
+        }
       }
