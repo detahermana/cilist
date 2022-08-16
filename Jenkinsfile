@@ -50,7 +50,7 @@ pipeline {
                 sh "docker image rmi detahermana/backend-cilist:stage-$BUILD_NUMBER"
                 sh "docker image rmi detahermana/frontend-cilist-stag:stage-$BUILD_NUMBER"
                 }else{ 
-                sh "kubectl set image deployment/backend-app bbackend-app=detahermana/backend-cilist:prod-$BUILD_NUMBER -n production"
+                sh "kubectl set image deployment/backend-app backend-app=detahermana/backend-cilist:prod-$BUILD_NUMBER -n production"
                 sh "kubectl set image deployment/frontend-app frontend-app=detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER -n production"
                 sh "docker image rmi detahermana/backend-cilist:prod-$BUILD_NUMBER"
                 sh "docker image rmi detahermana/frontend-cilist-prod:prod-$BUILD_NUMBER"
