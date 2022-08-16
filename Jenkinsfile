@@ -2,19 +2,19 @@ properties([pipelineTriggers([githubPush()])])
 pipeline {
     agent any
     stages {
-        //stage('Code Scanning') {
-        //  agent { label "agent1" }
-        //    steps {
-        //      //
-        //        script {
-        //        echo "Begin Test" 
-        //        def scannerHome = tool 'sonaqube1' ;
-	      //        withSonarQubeEnv('sonaqube') {
-	      //        sh "${scannerHome}/bin/sonar-scanner"
-	      //          }
-        //        }
-        //      }
-        //    }
+        stage('Code Scanning') {
+          agent { label "agent1" }
+            steps {
+              //
+                script {
+                echo "Begin Test" 
+                def scannerHome = tool 'SonarScanner' ;
+	              withSonarQubeEnv('sonarqube') {
+	              sh "${scannerHome}/bin/sonar-scanner"
+	                }
+                }
+              }
+            }
         stage('Build') {
           agent { label "agent1" }
             steps {
