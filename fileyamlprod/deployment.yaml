@@ -5,7 +5,7 @@ metadata:
   labels:
     app: frontend-app
 spec:
-  replica: 5
+  replicas: 5
   selector:
     matchLabels:
       app: frontend-app
